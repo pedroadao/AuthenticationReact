@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
+import { Alert, Box, Button, Container, Link as MuiLink, TextField, Typography } from '@mui/material'
 import { register as registerUser } from '../api/authApi'
 import { HttpError } from '../../../lib/http/httpClient'
 import { registerSchema, type RegisterFormValues } from '../schemas/registerSchema'
@@ -42,35 +43,49 @@ export function RegisterPage() {
 
   if (success) {
     return (
-      <main style={{ maxWidth: 360, margin: '3rem auto' }}>
-        <h1>Cadastro concluído</h1>
-        <p>Sua conta foi criada com sucesso.</p>
-        <button type="button" onClick={() => navigate('/login')}>
+      <Container maxWidth="xs" sx={{ mt: 8 }}>
+        <Typography component="h1" variant="h5" gutterBottom>
+          Cadastro concluído
+        </Typography>
+        <Typography>Sua conta foi criada com sucesso.</Typography>
+        <Button type="button" variant="contained" onClick={() => navigate('/login')} sx={{ mt: 3 }}>
           Ir para o login
-        </button>
-      </main>
+        </Button>
+      </Container>
     )
   }
 
   return (
-    <main style={{ maxWidth: 360, margin: '3rem auto' }}>
-      <h1>Criar conta</h1>
-      <form onSubmit={handleSubmit(onSubmit)} noValidate>
-        <div>
-          <label htmlFor="displayName">Nome</label>
-          <input id="displayName" type="text" autoComplete="name" {...register('displayName')} />
-          {errors.displayName && (
-            <p role="alert" style={{ color: 'crimson' }}>
-              {errors.displayName.message}
-            </p>
-          )}
-        </div>
+    <Container maxWidth="xs" sx={{ mt: 8 }}>
+      <Typography component="h1" variant="h5" gutterBottom>
+        Criar conta
+      </Typography>
+      <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
+        <TextField
+          id="displayName"
+          label="Nome"
+          type="text"
+          autoComplete="name"
+          fullWidth
+          margin="normal"
+          error={Boolean(errors.displayName)}
+          helperText={errors.displayName?.message}
+          slotProps={{ formHelperText: { role: 'alert' } }}
+          {...register('displayName')}
+        />
 
-        <div>
-          <label htmlFor="email">E-mail</label>
-          <input id="email" type="email" autoComplete="email" {...register('email')} />
-          {errors.email && <p role="alert" style={{ color: 'crimson' }}>{errors.email.message}</p>}
-        </div>
+        <TextField
+          id="email"
+          label="E-mail"
+          type="email"
+          autoComplete="email"
+          fullWidth
+          margin="normal"
+          error={Boolean(errors.email)}
+          helperText={errors.email?.message}
+          slotProps={{ formHelperText: { role: 'alert' } }}
+          {...register('email')}
+        />
 
         <PasswordField
           label="Senha"
@@ -80,19 +95,19 @@ export function RegisterPage() {
         />
 
         {formError && (
-          <p role="alert" style={{ color: 'crimson' }}>
+          <Alert severity="error" role="alert" sx={{ mt: 2 }}>
             {formError}
-          </p>
+          </Alert>
         )}
 
-        <button type="submit" disabled={isSubmitting}>
+        <Button type="submit" variant="contained" fullWidth disabled={isSubmitting} sx={{ mt: 3 }}>
           {isSubmitting ? 'Enviando…' : 'Cadastrar'}
-        </button>
-      </form>
+        </Button>
+      </Box>
 
-      <p>
-        Já tem conta? <Link to="/login">Entrar</Link>
-      </p>
-    </main>
+      <Typography sx={{ mt: 2 }}>
+        Já tem conta? <MuiLink component={Link} to="/login">Entrar</MuiLink>
+      </Typography>
+    </Container>
   )
 }

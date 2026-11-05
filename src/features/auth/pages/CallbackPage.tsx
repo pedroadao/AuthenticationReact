@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, Navigate, useSearchParams } from 'react-router-dom'
+import { Alert, Container, Link as MuiLink, Typography } from '@mui/material'
 import { useAuth } from '../context/AuthContext'
 
 export function CallbackPage() {
@@ -36,18 +37,18 @@ export function CallbackPage() {
 
   if (error) {
     return (
-      <main style={{ maxWidth: 360, margin: '3rem auto' }}>
-        <p role="alert" style={{ color: 'crimson' }}>
+      <Container maxWidth="xs" sx={{ mt: 8 }}>
+        <Alert severity="error" role="alert" sx={{ mb: 2 }}>
           {error}
-        </p>
-        <Link to="/login">Voltar para o login</Link>
-      </main>
+        </Alert>
+        <MuiLink component={Link} to="/login">Voltar para o login</MuiLink>
+      </Container>
     )
   }
 
   return (
-    <main style={{ maxWidth: 360, margin: '3rem auto' }}>
-      <p>Concluindo login…</p>
-    </main>
+    <Container maxWidth="xs" sx={{ mt: 8 }}>
+      <Typography>Concluindo login…</Typography>
+    </Container>
   )
 }

@@ -1,3 +1,4 @@
+import { Alert, Button, Container, List, ListItem, ListItemText, Typography } from '@mui/material'
 import { useAuth } from '../../auth/context/AuthContext'
 import { useMe } from '../../auth/hooks/useMe'
 
@@ -6,22 +7,34 @@ export function HomePage() {
   const { data: me, isLoading, isError } = useMe()
 
   return (
-    <main style={{ maxWidth: 480, margin: '3rem auto' }}>
-      <h1>Área autenticada</h1>
+    <Container maxWidth="sm" sx={{ mt: 8 }}>
+      <Typography component="h1" variant="h5" gutterBottom>
+        Área autenticada
+      </Typography>
 
-      {isLoading && <p>Carregando dados do usuário…</p>}
-      {isError && <p role="alert">Não foi possível carregar seus dados.</p>}
+      {isLoading && <Typography>Carregando dados do usuário…</Typography>}
+      {isError && (
+        <Alert severity="error" role="alert">
+          Não foi possível carregar seus dados.
+        </Alert>
+      )}
       {me && (
-        <ul>
-          <li>ID: {me.id}</li>
-          <li>Nome: {me.name}</li>
-          <li>E-mail: {me.email}</li>
-        </ul>
+        <List>
+          <ListItem>
+            <ListItemText primary={`ID: ${me.id}`} />
+          </ListItem>
+          <ListItem>
+            <ListItemText primary={`Nome: ${me.name}`} />
+          </ListItem>
+          <ListItem>
+            <ListItemText primary={`E-mail: ${me.email}`} />
+          </ListItem>
+        </List>
       )}
 
-      <button type="button" onClick={logout}>
+      <Button type="button" variant="outlined" onClick={logout} sx={{ mt: 2 }}>
         Sair
-      </button>
-    </main>
+      </Button>
+    </Container>
   )
 }

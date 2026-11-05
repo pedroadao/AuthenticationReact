@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { Link, useLocation } from 'react-router-dom'
+import { Alert, Box, Button, Container, Link as MuiLink, TextField, Typography } from '@mui/material'
 import { useAuth } from '../context/AuthContext'
 import { HttpError } from '../../../lib/http/httpClient'
 import { loginSchema, type LoginFormValues } from '../schemas/loginSchema'
@@ -37,14 +38,23 @@ export function LoginPage() {
   }
 
   return (
-    <main style={{ maxWidth: 360, margin: '3rem auto' }}>
-      <h1>Entrar</h1>
-      <form onSubmit={handleSubmit(onSubmit)} noValidate>
-        <div>
-          <label htmlFor="email">E-mail</label>
-          <input id="email" type="email" autoComplete="username" {...register('email')} />
-          {errors.email && <p role="alert" style={{ color: 'crimson' }}>{errors.email.message}</p>}
-        </div>
+    <Container maxWidth="xs" sx={{ mt: 8 }}>
+      <Typography component="h1" variant="h5" gutterBottom>
+        Entrar
+      </Typography>
+      <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
+        <TextField
+          id="email"
+          label="E-mail"
+          type="email"
+          autoComplete="username"
+          fullWidth
+          margin="normal"
+          error={Boolean(errors.email)}
+          helperText={errors.email?.message}
+          slotProps={{ formHelperText: { role: 'alert' } }}
+          {...register('email')}
+        />
 
         <PasswordField
           label="Senha"
@@ -54,19 +64,19 @@ export function LoginPage() {
         />
 
         {formError && (
-          <p role="alert" style={{ color: 'crimson' }}>
+          <Alert severity="error" role="alert" sx={{ mt: 2 }}>
             {formError}
-          </p>
+          </Alert>
         )}
 
-        <button type="submit" disabled={isSubmitting}>
+        <Button type="submit" variant="contained" fullWidth disabled={isSubmitting} sx={{ mt: 3 }}>
           {isSubmitting ? 'Entrando…' : 'Entrar'}
-        </button>
-      </form>
+        </Button>
+      </Box>
 
-      <p>
-        Não tem conta? <Link to="/register">Cadastre-se</Link>
-      </p>
-    </main>
+      <Typography sx={{ mt: 2 }}>
+        Não tem conta? <MuiLink component={Link} to="/register">Cadastre-se</MuiLink>
+      </Typography>
+    </Container>
   )
 }
